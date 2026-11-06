@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Patients</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f172a, #1e3a5f);
+            color: white;
+            padding: 22px 6%;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #0f766e;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            color: #115e59;
+        }
+
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .top h1 {
+            margin: 0 0 9px;
+            color: #0f172a;
+            font-size: 27px;
+        }
+
+        .top p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 7px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .primary {
+            background: #0f766e;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #115e59;
+        }
+
+        .edit {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .edit:hover {
+            background: #bae6fd;
+        }
+
+        .delete {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .delete:hover {
+            background: #fecaca;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 22px;
+            font-size: 14px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .patient-id {
+            color: #64748b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .message {
+            padding: 13px 15px;
+            margin: 16px 0;
+            border-radius: 8px;
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 14px;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 15px;
+            color: #64748b;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 10px;
+            color: #334155;
+            font-size: 18px;
+        }
+
+        .empty-state p {
+            margin: 0 0 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            header h2 {
+                font-size: 18px;
+            }
+
+            .container {
+                margin: 25px auto;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 20px 15px;
+            }
+
+            .top h1 {
+                font-size: 23px;
+            }
+
+            .top .primary {
+                width: 100%;
+                text-align: center;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Heart Failure Survival Prediction System</h2>
+</header>
+
+<main class="container">
+
+    <a class="back" href="{% url 'admin_dashboard' %}">
+        ← Back to Admin Dashboard
+    </a>
+
+    <section class="panel">
+
+        <div class="top">
+            <div>
+                <h1>Manage Patients</h1>
+                <p>View, register, and manage patient records.</p>
+            </div>
+
+            <a class="btn primary" href="{% url 'add_patient' %}">
+                + Register Patient
+            </a>
+        </div>
+
+        {% for message in messages %}
+            <div class="message {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% if patients %}
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for patient in patients %}
+                        <tr>
+                            <td class="patient-id">{{ patient.id }}</td>
+                            <td class="patient-name">{{ patient.name }}</td>
+                            <td>{{ patient.age }}</td>
+
+                            <td>
+                                {% if patient.sex == 1 %}
+                                    Male
+                                {% else %}
+                                    Female
+                                {% endif %}
+                            </td>
+
+                            <td>{{ patient.contact }}</td>
+
+                            <td>
+                                <div class="actions">
+                                    <a class="btn edit"
+                                       href="{% url 'edit_patient' patient.id %}">
+                                        Edit
+                                    </a>
+
+                                    <a class="btn delete"
+                                       href="{% url 'delete_patient' patient.id %}">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+                <h3>No Patients Found</h3>
+                <p>No patients have been registered yet.</p>
+
+                <a class="btn primary" href="{% url 'add_patient' %}">
+                    Register First Patient
+                </a>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | HeartCare</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #10243a;
+            --navy-light: #193650;
+            --teal: #0d9488;
+            --teal-light: #ccfbf1;
+            --bg: #f3f7fb;
+            --white: #ffffff;
+            --text: #172b40;
+            --muted: #708197;
+            --border: #e5edf4;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: 255px;
+            background: var(--navy);
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            background: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .brand h2 {
+            font-size: 18px;
+            letter-spacing: 0.3px;
+        }
+
+        .brand p {
+            color: #a9c2d5;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #91a9bd;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin: 32px 10px 14px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px 13px;
+            margin-bottom: 8px;
+            color: #d4e1ec;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--navy-light);
+            color: white;
+        }
+
+        .nav-link.active {
+            border-left: 3px solid #2dd4bf;
+        }
+
+        .nav-icon {
+            font-size: 19px;
+            width: 23px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+        }
+
+        .sidebar-note {
+            background: rgba(255,255,255,0.07);
+            padding: 16px;
+            border-radius: 12px;
+            color: #d4e1ec;
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-note strong {
+            display: block;
+            color: white;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .logout-link {
+            display: block;
+            padding: 13px;
+            color: #fecaca;
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Main content */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 82px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .topbar-title {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .topbar-title strong {
+            display: block;
+            color: var(--text);
+            font-size: 19px;
+            margin-bottom: 4px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 43px;
+            height: 43px;
+            background: var(--teal-light);
+            color: #0f766e;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .profile-role {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .content {
+            max-width: 1250px;
+            padding: 35px 38px;
+            margin: auto;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(115deg, #102c46, #155e75);
+            border-radius: 18px;
+            padding: 34px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 12px 30px rgba(16,44,70,0.12);
+        }
+
+        .welcome-banner::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 40px solid rgba(255,255,255,0.045);
+            border-radius: 50%;
+            right: -60px;
+            top: -100px;
+            pointer-events: none;
+        }
+
+        .welcome-label {
+            color: #99f6e4;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1.8px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .welcome-banner h1 {
+            font-size: clamp(23px, 3vw, 31px);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .welcome-banner p {
+            color: #d4e8f2;
+            line-height: 1.8;
+            font-size: 14px;
+            max-width: 560px;
+        }
+
+        .welcome-symbol {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+        }
+
+        .section-heading {
+            margin: 34px 0 18px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 27px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 18px rgba(25,54,80,0.035);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(25,54,80,0.09);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 23px;
+        }
+
+        .card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+        }
+
+        .teal-icon {
+            background: #ccfbf1;
+        }
+
+        .blue-icon {
+            background: #dbeafe;
+        }
+
+        .card-tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #0f766e;
+            background: #f0fdfa;
+            padding: 7px 10px;
+            border-radius: 20px;
+        }
+
+        .card h3 {
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            min-height: 47px;
+            margin-bottom: 22px;
+        }
+
+        .card-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 17px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .primary-button {
+            color: white;
+            background: var(--teal);
+        }
+
+        .primary-button:hover {
+            background: #0f766e;
+        }
+
+        .secondary-button {
+            color: #1d4ed8;
+            background: #eff6ff;
+        }
+
+        .secondary-button:hover {
+            background: #dbeafe;
+        }
+
+        .info-panel {
+            margin-top: 26px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .info-icon {
+            font-size: 24px;
+        }
+
+        .info-panel h3 {
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .info-panel p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #8998a9;
+            font-size: 12px;
+        }
+
+        /* Tablet and mobile */
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 215px;
+            }
+
+            .content {
+                padding: 25px 22px;
+            }
+
+            .topbar {
+                padding: 0 22px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 17px;
+            }
+
+            .brand {
+                padding-bottom: 15px;
+            }
+
+            .sidebar .nav-title,
+            .sidebar-bottom,
+            .nav-link:not(.active) {
+                display: none;
+            }
+
+            .sidebar nav {
+                display: flex;
+                gap: 8px;
+                margin-top: 12px;
+            }
+
+            .nav-link {
+                margin: 0;
+                flex: 1;
+                justify-content: center;
+                padding: 11px 8px;
+                font-size: 12px;
+            }
+
+            .topbar {
+                height: auto;
+                min-height: 75px;
+                padding: 16px;
+            }
+
+            .profile-name {
+                max-width: 115px;
+                overflow-wrap: anywhere;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .welcome-banner {
+                padding: 25px 20px;
+            }
+
+            .welcome-symbol {
+                display: none;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">+</div>
+            <div>
+                <h2>HeartCare</h2>
+                <p>Clinical Prediction System</p>
+            </div>
+        </div>
+
+        <p class="nav-title">Main Menu</p>
+
+        <nav>
+            <a href="{% url 'dashboard' %}" class="nav-link active">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="{% url 'search_patient' %}" class="nav-link">
+                <span class="nav-icon">⌕</span>
+                Search Patient
+            </a>
+
+            <a href="{% url 'prediction_history' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                Prediction History
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                <strong>Clinical Decision Support</strong>
+                Review patient information and model predictions to support clinical assessment.
+            </div>
+
+            <a href="{% url 'doctor_logout' %}" class="logout-link"
+               onclick="return confirm('Are you sure you want to log out?');">
+                ↪ &nbsp; Logout
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- Main area -->
+    <main class="main">
+
+        <header class="topbar">
+            <div class="topbar-title">
+                <strong>Doctor Dashboard</strong>
+                Your workspace at a glance
+            </div>
+
+            <div class="profile">
+                <div class="avatar">
+                    {{ doctor.name|first|upper }}
+                </div>
+                <div>
+                    <div class="profile-name">Dr. {{ doctor.name }}</div>
+                    <div class="profile-role">Doctor Account</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- Welcome banner -->
+            <section class="welcome-banner">
+                <div>
+                    <div class="welcome-label">Healthcare • Machine Learning</div>
+
+                    <h1>Welcome back, Dr. {{ doctor.name }}!</h1>
+
+                    <p>
+                        Manage patient records, enter clinical parameters,
+                        and review heart failure survival predictions
+                        from one convenient workspace.
+                    </p>
+                </div>
+
+                <div class="welcome-symbol">♡</div>
+            </section>
+
+            <!-- Main actions -->
+            <section class="section-heading">
+                <h2>Quick Access</h2>
+                <p>Choose an action to continue your work.</p>
+            </section>
+
+            <section class="cards">
+
+                <article class="card">
+                    <div class="card-top">
+                        <div class="card-icon teal-icon">♙</div>
+                        <span class="card-tag">Patient Care</span>
+                    </div>
+
+                    <h3>Search Patient</h3>
+
+                    <p>
+                        Find a registered patient using their patient ID
+                        or name, then proceed to enter clinical parameters
+                        for prediction.
+                    </p>
+
+                    <a href="{% url 'search_patient' %}"
+                       class="card-button primary-button">
+                        Search Patients <span>→</span>
+                    </a>
+                </article>
+
+                <article class="card">
+                    <div class="card-top">
+                        <div class="card-icon blue-icon">▤</div>
+                        <span class="card-tag">Records</span>
+                    </div>
+
+                    <h3>Prediction History</h3>
+
+                    <p>
+                        Review previous prediction records, including
+                        patient details, predicted outcomes, probabilities,
+                        and prediction dates.
+                    </p>
+
+                    <a href="{% url 'prediction_history' %}"
+                       class="card-button secondary-button">
+                        View History <span>→</span>
+                    </a>
+                </article>
+
+            </section>
+
+            <!-- Information panel -->
+            <section class="info-panel">
+                <div class="info-icon">ⓘ</div>
+                <div>
+                    <h3>About this system</h3>
+                    <p>
+                        This application uses a trained Random Forest
+                        machine-learning model to estimate heart failure
+                        outcomes from clinical parameters. Predictions
+                        are intended to support assessment and should
+                        not replace professional medical judgment.
+                    </p>
+                </div>
+            </section>
+
+            <footer class="footer">
+                Heart Failure Survival Prediction System
+                <br>
+                Machine Learning Based Clinical Decision Support
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

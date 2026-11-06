@@ -1,0 +1,429 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History | HeartCare</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f172a, #173b5e);
+            color: white;
+            padding: 24px 5%;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .brand {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #5eead4;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 22px 35px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            font-size: 26px;
+            color: #0f172a;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .button-primary {
+            background: #0f766e;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background: #115e59;
+            transform: translateY(-1px);
+        }
+
+        .history-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+        }
+
+        .history-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .history-heading h3 {
+            color: #0f172a;
+            font-size: 19px;
+        }
+
+        .doctor-label {
+            background: #f0fdfa;
+            color: #0f766e;
+            border: 1px solid #ccfbf1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f1f5f9;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            color: #475569;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 17px 16px;
+            border-top: 1px solid #edf2f7;
+            font-size: 14px;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .patient-id {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .patient-name {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .date-text {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .death-event {
+            color: #b91c1c;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .survival {
+            color: #047857;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .probability {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border-radius: 50%;
+            font-size: 26px;
+        }
+
+        .empty h3 {
+            color: #0f172a;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 9px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 22px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .container {
+                margin-top: 25px;
+                padding: 0 14px 25px;
+            }
+
+            .page-heading h2 {
+                font-size: 23px;
+            }
+
+            .history-box {
+                padding: 16px;
+            }
+
+            .top-bar {
+                align-items: flex-start;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .history-heading {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="brand">HeartCare · Clinical Support</div>
+            <h1>Heart Failure Survival Prediction System</h1>
+            <p>Machine learning-based clinical decision support</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="top-bar">
+            <div class="page-heading">
+                <h2>Prediction History</h2>
+                <p>Review previous model predictions and their recorded details.</p>
+            </div>
+
+            <a href="{% url 'dashboard' %}" class="button button-primary">
+                &#8592; Back to Dashboard
+            </a>
+        </div>
+
+        <section class="history-box">
+
+            <div class="history-heading">
+                <h3>Previous Predictions</h3>
+
+                <div class="doctor-label">
+                    Doctor: <strong>{{ doctor.name }}</strong>
+                </div>
+            </div>
+
+            {% if histories %}
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Patient Name</th>
+                                <th>Date &amp; Time</th>
+                                <th>Prediction Result</th>
+                                <th>Death Event Probability</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for history in histories %}
+                                <tr>
+                                    <td>
+                                        <span class="patient-id">
+                                            #{{ history.patient.id }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="patient-name">
+                                            {{ history.patient.name }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="date-text">
+                                            {{ history.created_at|date:"d-m-Y H:i" }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if history.prediction == 1 %}
+                                            <span class="status death-event">
+                                                Death Event Predicted
+                                            </span>
+                                        {% else %}
+                                            <span class="status survival">
+                                                Survival Predicted
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <span class="probability">
+                                            {% widthratio history.probability 1 100 %}%
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+                <div class="empty">
+                    <div class="empty-icon">&#128203;</div>
+                    <h3>No Prediction History Yet</h3>
+                    <p>
+                        No previous predictions are available for display.
+                        Once predictions have been recorded, they will appear here.
+                    </p>
+                </div>
+
+            {% endif %}
+
+            <div class="disclaimer">
+                <strong>Important:</strong> These results are generated by a
+                machine learning model for academic and decision-support purposes.
+                They are not medical diagnoses and should not replace professional
+                medical evaluation.
+            </div>
+
+        </section>
+
+        <div class="footer">
+            Heart Failure Survival Prediction System &copy; 2026
+        </div>
+
+    </main>
+
+</body>
+</html>
+```

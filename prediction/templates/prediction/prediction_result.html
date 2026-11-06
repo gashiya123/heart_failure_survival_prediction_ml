@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | HeartCare</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #10243a;
+            --teal: #0d9488;
+            --background: #f3f7fb;
+            --text: #172b40;
+            --muted: #708197;
+            --border: #e2eaf2;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--navy);
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            background: var(--teal);
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: #b8ccdb;
+        }
+
+        .back-button {
+            color: white;
+            text-decoration: none;
+            padding: 11px 15px;
+            border-radius: 9px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            font-size: 13px;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.18);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 38px 22px 50px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .eyebrow {
+            color: var(--teal);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-heading h2 {
+            font-size: 29px;
+            margin-bottom: 9px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .result-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 30px;
+            box-shadow: 0 7px 25px rgba(16,36,58,0.045);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .section-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: #ccfbf1;
+            color: #0f766e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .section-title h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .section-title p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .patient-details {
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 27px;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .detail-label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .prediction-box {
+            text-align: center;
+            padding: 32px 24px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: #fbfdff;
+        }
+
+        .result-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .death-event {
+            color: #b91c1c;
+        }
+
+        .death-event .result-icon {
+            background: #fee2e2;
+        }
+
+        .survival {
+            color: #047857;
+        }
+
+        .survival .result-icon {
+            background: #d1fae5;
+        }
+
+        .result-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result {
+            font-size: 29px;
+            font-weight: 750;
+            margin-bottom: 14px;
+        }
+
+        .prediction-description {
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #64748b;
+        }
+
+        .probability-card {
+            max-width: 430px;
+            margin: 27px auto 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        .probability-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .probability {
+            font-size: 34px;
+            font-weight: 750;
+            color: var(--navy);
+        }
+
+        .probability-caption {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-top: 8px;
+        }
+
+        .note {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            margin-top: 24px;
+            padding: 19px;
+            border-radius: 11px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+        }
+
+        .note-icon {
+            font-size: 21px;
+        }
+
+        .note h3 {
+            font-size: 13px;
+            color: #9a3412;
+            margin-bottom: 7px;
+        }
+
+        .note p {
+            color: #7c5b45;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 27px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 45px;
+            padding: 12px 19px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .primary-button {
+            background: var(--teal);
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #0f766e;
+        }
+
+        .secondary-button {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .secondary-button:hover {
+            background: #dbeafe;
+        }
+
+        .footer {
+            text-align: center;
+            color: #8796a7;
+            font-size: 12px;
+            padding-top: 30px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 17px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .brand h1 {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 27px 14px 35px;
+            }
+
+            .page-heading h2 {
+                font-size: 25px;
+            }
+
+            .result-box {
+                padding: 20px 15px;
+            }
+
+            .patient-details {
+                padding: 17px;
+            }
+
+            .patient-grid {
+                gap: 18px 12px;
+            }
+
+            .prediction-box {
+                padding: 26px 15px;
+            }
+
+            .result {
+                font-size: 25px;
+            }
+
+            .probability {
+                font-size: 30px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">
+        <div class="brand-icon">+</div>
+        <div>
+            <h1>HeartCare</h1>
+            <p>Clinical Prediction System</p>
+        </div>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-button">
+        ← Back to Dashboard
+    </a>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <div class="eyebrow">Doctor Workspace</div>
+        <h2>Prediction Result</h2>
+        <p>
+            Review the machine-learning output and the associated patient details.
+        </p>
+    </section>
+
+    <section class="result-box">
+
+        <div class="section-title">
+            <div class="section-icon">♙</div>
+            <div>
+                <h3>Patient Details</h3>
+                <p>Information for the selected patient.</p>
+            </div>
+        </div>
+
+        <div class="patient-details">
+            <div class="patient-grid">
+
+                <div>
+                    <span class="detail-label">Patient ID</span>
+                    <span class="detail-value">#{{ patient.id }}</span>
+                </div>
+
+                <div>
+                    <span class="detail-label">Patient Name</span>
+                    <span class="detail-value">{{ patient.name }}</span>
+                </div>
+
+                <div>
+                    <span class="detail-label">Age</span>
+                    <span class="detail-value">{{ patient.age }} years</span>
+                </div>
+
+                <div>
+                    <span class="detail-label">Sex</span>
+                    <span class="detail-value">{{ patient.sex }}</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="prediction-box">
+
+            {% if prediction == 1 %}
+
+                <div class="death-event">
+                    <div class="result-icon">!</div>
+                    <div class="result-label">Model Prediction</div>
+                    <div class="result">Death Event Predicted</div>
+                </div>
+
+                <p class="prediction-description">
+                    The model predicts a death event based on the
+                    clinical parameters entered.
+                </p>
+
+            {% else %}
+
+                <div class="survival">
+                    <div class="result-icon">✓</div>
+                    <div class="result-label">Model Prediction</div>
+                    <div class="result">Survival Predicted</div>
+                </div>
+
+                <p class="prediction-description">
+                    The model predicts no death event during the
+                    follow-up period represented by the dataset.
+                </p>
+
+            {% endif %}
+
+            <div class="probability-card">
+                <div class="probability-label">
+                    Estimated Death Event Probability
+                </div>
+
+                <div class="probability">
+                    {{ probability_percentage }}%
+                </div>
+
+                <p class="probability-caption">
+                    This percentage represents the model's estimated
+                    probability of a death event (DEATH_EVENT = 1).
+                    The predicted result is determined using the
+                    threshold configured in the application.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="note">
+            <div class="note-icon">ⓘ</div>
+            <div>
+                <h3>Important Information</h3>
+                <p>
+                    This result is generated by a machine-learning model
+                    for academic and decision-support purposes. It is
+                    not a medical diagnosis and should not replace
+                    professional medical judgment.
+                </p>
+            </div>
+        </div>
+
+        <div class="buttons">
+
+            <a href="{% url 'prediction_history' %}"
+               class="button primary-button">
+                View Prediction History →
+            </a>
+
+            <a href="{% url 'dashboard' %}"
+               class="button secondary-button">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        Heart Failure Survival Prediction System
+        <br>
+        Machine Learning Based Clinical Decision Support
+    </footer>
+
+</main>
+
+</body>
+</html>

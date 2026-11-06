@@ -1,0 +1,695 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Parameters | HeartCare</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #10243a;
+            --teal: #0d9488;
+            --teal-dark: #0f766e;
+            --background: #f3f7fb;
+            --text: #172b40;
+            --muted: #708197;
+            --border: #e2eaf2;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Header */
+
+        .header {
+            background: var(--navy);
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: #b8ccdb;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 15px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            color: white;
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.18);
+        }
+
+        /* Main container */
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 35px 24px 50px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .eyebrow {
+            color: var(--teal);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-heading h2 {
+            font-size: 29px;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Patient information */
+
+        .patient-box,
+        .form-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 6px 22px rgba(16,36,58,0.04);
+            margin-bottom: 24px;
+        }
+
+        .patient-box {
+            padding: 25px 28px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .section-icon {
+            width: 47px;
+            height: 47px;
+            background: #ccfbf1;
+            color: #0f766e;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            flex-shrink: 0;
+        }
+
+        .section-title h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .section-title p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .patient-details {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .detail {
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 0;
+        }
+
+        .detail-label {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        /* Clinical form */
+
+        .form-box {
+            padding: 29px;
+        }
+
+        .info {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            margin-top: -8px;
+            margin-bottom: 27px;
+        }
+
+        .form-section-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            margin-bottom: 21px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-section-heading span {
+            color: var(--teal);
+            font-size: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 13px;
+            background: white;
+            color: var(--text);
+            border: 1px solid #d5e0e9;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(13,148,136,0.12);
+        }
+
+        .field input[readonly] {
+            background: #f1f5f9;
+            color: #536579;
+            cursor: not-allowed;
+        }
+
+        .field .hint {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 7px;
+            line-height: 1.6;
+        }
+
+        .form-actions {
+            margin-top: 30px;
+            padding-top: 23px;
+            border-top: 1px solid var(--border);
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 50px;
+            border: none;
+            border-radius: 10px;
+            background: var(--teal);
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .submit-button:hover {
+            background: var(--teal-dark);
+            transform: translateY(-1px);
+        }
+
+        .submit-button:focus-visible,
+        .back-button:focus-visible {
+            outline: 3px solid #5eead4;
+            outline-offset: 3px;
+        }
+
+        .disclaimer {
+            display: flex;
+            gap: 12px;
+            background: #f0fdfa;
+            border: 1px solid #ccfbf1;
+            border-radius: 12px;
+            padding: 17px;
+            margin-top: 22px;
+        }
+
+        .disclaimer-icon {
+            font-size: 20px;
+        }
+
+        .disclaimer p {
+            color: #38665f;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            text-align: center;
+            color: #8796a7;
+            font-size: 12px;
+            padding-top: 15px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 750px) {
+            .patient-details {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 17px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .brand h1 {
+                font-size: 17px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .back-button {
+                flex: 1;
+            }
+
+            .container {
+                padding: 25px 14px 35px;
+            }
+
+            .page-heading h2 {
+                font-size: 25px;
+            }
+
+            .patient-box,
+            .form-box {
+                padding: 21px 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .patient-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .detail {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">
+        <div class="brand-icon">+</div>
+        <div>
+            <h1>HeartCare</h1>
+            <p>Clinical Prediction System</p>
+        </div>
+    </div>
+
+    <div class="header-actions">
+        <a href="{% url 'search_patient' %}" class="back-button">
+            ← Back to Search Patients
+        </a>
+
+        <a href="{% url 'dashboard' %}" class="back-button">
+            Dashboard
+        </a>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <div class="eyebrow">Doctor Workspace</div>
+        <h2>Clinical Parameters</h2>
+        <p>
+            Review the selected patient's details and enter the required
+            clinical parameters to generate a machine-learning prediction.
+        </p>
+    </section>
+
+    <!-- Selected patient -->
+
+    <section class="patient-box">
+
+        <div class="section-title">
+            <div class="section-icon">♙</div>
+            <div>
+                <h3>Selected Patient</h3>
+                <p>Confirm the patient details before continuing.</p>
+            </div>
+        </div>
+
+        <div class="patient-details">
+
+            <div class="detail">
+                <span class="detail-label">Patient ID</span>
+                <span class="detail-value">#{{ patient.id }}</span>
+            </div>
+
+            <div class="detail">
+                <span class="detail-label">Patient Name</span>
+                <span class="detail-value">{{ patient.name }}</span>
+            </div>
+
+            <div class="detail">
+                <span class="detail-label">Age</span>
+                <span class="detail-value">{{ patient.age }} years</span>
+            </div>
+
+            <div class="detail">
+                <span class="detail-label">Sex</span>
+                <span class="detail-value">{{ patient.sex }}</span>
+            </div>
+
+            <div class="detail">
+                <span class="detail-label">Contact</span>
+                <span class="detail-value">
+                    {{ patient.contact|default:"Not provided" }}
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Clinical parameter form -->
+
+    <section class="form-box">
+
+        <div class="section-title">
+            <div class="section-icon">⌁</div>
+            <div>
+                <h3>Enter Clinical Parameters</h3>
+                <p>Complete all required fields.</p>
+            </div>
+        </div>
+
+        <p class="info">
+            Enter the patient's clinical values carefully.
+            Age and sex are taken from the registered patient record.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-section-heading">
+                <span>▦</span>
+                Patient and Clinical Information
+            </div>
+
+            <div class="form-grid">
+
+                <!-- AGE -->
+                <div class="field">
+                    <label for="age">Age</label>
+                    <input
+                        type="number"
+                        id="age"
+                        name="age"
+                        value="{{ patient.age }}"
+                        readonly
+                    >
+                </div>
+
+                <!-- SEX -->
+                <div class="field">
+                    <label for="sex">Sex</label>
+                    <input
+                        type="number"
+                        id="sex"
+                        name="sex"
+                        value="{{ patient.sex }}"
+                        readonly
+                    >
+                </div>
+
+                <!-- ANAEMIA -->
+                <div class="field">
+                    <label for="anaemia">Anaemia</label>
+                    <select id="anaemia" name="anaemia" required>
+                        <option value="">Select an option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- CPK -->
+                <div class="field">
+                    <label for="creatinine_phosphokinase">
+                        Creatinine Phosphokinase (CPK)
+                    </label>
+                    <input
+                        type="number"
+                        id="creatinine_phosphokinase"
+                        name="creatinine_phosphokinase"
+                        min="0"
+                        step="1"
+                        placeholder="Enter CPK value"
+                        required
+                    >
+                </div>
+
+                <!-- DIABETES -->
+                <div class="field">
+                    <label for="diabetes">Diabetes</label>
+                    <select id="diabetes" name="diabetes" required>
+                        <option value="">Select an option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- EJECTION FRACTION -->
+                <div class="field">
+                    <label for="ejection_fraction">
+                        Ejection Fraction (%)
+                    </label>
+                    <input
+                        type="number"
+                        id="ejection_fraction"
+                        name="ejection_fraction"
+                        min="0"
+                        max="100"
+                        step="1"
+                        placeholder="Enter percentage"
+                        required
+                    >
+                </div>
+
+                <!-- HIGH BLOOD PRESSURE -->
+                <div class="field">
+                    <label for="high_blood_pressure">
+                        High Blood Pressure
+                    </label>
+                    <select
+                        id="high_blood_pressure"
+                        name="high_blood_pressure"
+                        required
+                    >
+                        <option value="">Select an option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- PLATELETS -->
+                <div class="field">
+                    <label for="platelets">Platelets</label>
+                    <input
+                        type="number"
+                        id="platelets"
+                        name="platelets"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter platelet count"
+                        required
+                    >
+                </div>
+
+                <!-- SERUM CREATININE -->
+                <div class="field">
+                    <label for="serum_creatinine">Serum Creatinine</label>
+                    <input
+                        type="number"
+                        id="serum_creatinine"
+                        name="serum_creatinine"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter serum creatinine (e.g., 1.0, 1.2)"
+                        required
+                    >
+                </div>
+
+                <!-- SERUM SODIUM -->
+                <div class="field">
+                    <label for="serum_sodium">Serum Sodium</label>
+                    <input
+                        type="number"
+                        id="serum_sodium"
+                        name="serum_sodium"
+                        min="0"
+                        step="1"
+                        placeholder="Enter serum sodium(e.g., 135, 137)"
+                        required
+                    >
+                </div>
+
+                <!-- SMOKING -->
+                <div class="field">
+                    <label for="smoking">Smoking</label>
+                    <select id="smoking" name="smoking" required>
+                        <option value="">Select an option</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- TIME -->
+                <div class="field">
+                    <label for="time">Time</label>
+                    <input
+                        type="number"
+                        id="time"
+                        name="time"
+                        min="0"
+                        step="1"
+                        placeholder="Enter time value"
+                        required
+                    >
+                    <span class="hint">
+                        Use the time definition expected by your trained model.
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-button">
+                    Generate Prediction &nbsp; →
+                </button>
+            </div>
+
+        </form>
+
+        <div class="disclaimer">
+            <div class="disclaimer-icon">ⓘ</div>
+            <p>
+                <strong>Important:</strong> This system provides a
+                machine-learning estimate based on the entered clinical
+                parameters. The output is intended to support assessment
+                and should not replace professional medical judgment.
+            </p>
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        Heart Failure Survival Prediction System
+        <br>
+        Machine Learning Based Clinical Decision Support
+    </footer>
+
+</main>
+
+</body>
+</html>

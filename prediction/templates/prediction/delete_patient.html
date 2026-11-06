@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Patient</title>
+    <style>
+        body{font-family:Arial,sans-serif;background:#f4f7fb;color:#1e293b;margin:0}
+        header{background:#1e3a8a;color:white;padding:22px 6%}
+        .container{max-width:550px;margin:50px auto;padding:0 20px}
+        .panel{background:white;padding:28px;border-radius:12px;box-shadow:0 3px 12px #0000000d}
+        .back{display:inline-block;margin-bottom:20px;color:#2563eb;text-decoration:none}
+        button{padding:12px 16px;background:#dc2626;color:white;border:0;border-radius:6px;cursor:pointer}
+        .cancel{display:inline-block;padding:12px 16px;background:#e2e8f0;color:#1e293b;text-decoration:none;border-radius:6px}
+    </style>
+</head>
+<body>
+<header><h2>Heart Failure Survival Prediction System</h2></header>
+<main class="container">
+    <a class="back" href="{% url 'manage_patients' %}">← Back to Manage Patients</a>
+    <section class="panel">
+        <h1>Delete Patient</h1>
+        <p>Are you sure you want to delete <strong>{{ patient.name }}</strong>?</p>
+        <p>If the patient has prediction history, deletion will be blocked to preserve those records.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Confirm Delete</button>
+            <a class="cancel" href="{% url 'manage_patients' %}">Cancel</a>
+        </form>
+    </section>
+</main>
+</body>
+</html>

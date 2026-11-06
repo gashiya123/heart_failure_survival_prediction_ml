@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#1e293b}
+        header{background:#1e3a8a;color:white;padding:22px 6%}
+        .container{max-width:550px;margin:35px auto;padding:0 20px}
+        .back{display:inline-block;margin-bottom:20px;color:#2563eb;text-decoration:none}
+        .panel{background:white;padding:28px;border-radius:12px;box-shadow:0 3px 12px #0000000d}
+        label{display:block;font-weight:bold;margin:18px 0 8px}
+        input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:6px;font-size:15px}
+        button{width:100%;padding:13px;margin-top:24px;border:0;border-radius:6px;background:#2563eb;color:white;font-size:16px;cursor:pointer}
+        .errorlist{color:#dc2626}
+    </style>
+</head>
+<body>
+<header><h2>Heart Failure Survival Prediction System</h2></header>
+<main class="container">
+    <a class="back" href="{% url 'manage_patients' %}">← Back to Manage Patients</a>
+    <section class="panel">
+        <h1>{{ page_title }}</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <label for="{{ form.name.id_for_label }}">Patient Name</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+
+            <label for="{{ form.age.id_for_label }}">Age</label>
+            {{ form.age }}
+            {{ form.age.errors }}
+
+            <label for="{{ form.sex.id_for_label }}">Sex</label>
+            {{ form.sex }}
+            {{ form.sex.errors }}
+
+            <label for="{{ form.contact.id_for_label }}">Contact Number</label>
+            {{ form.contact }}
+            {{ form.contact.errors }}
+
+            <button type="submit">Save Patient</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

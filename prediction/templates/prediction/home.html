@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Heart Failure Survival Prediction System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f172a, #173b5e);
+            color: white;
+            padding: 24px 5%;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.15);
+        }
+
+        .header-content {
+            max-width: 1150px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: #0f766e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .header h1 {
+            font-size: 23px;
+            line-height: 1.4;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 65px 24px 45px;
+            flex: 1;
+        }
+
+        .welcome {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 45px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: #0f766e;
+            background: #ccfbf1;
+            border-radius: 30px;
+            padding: 8px 15px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .welcome h2 {
+            font-size: clamp(29px, 5vw, 42px);
+            line-height: 1.2;
+            color: #0f172a;
+            margin-bottom: 18px;
+        }
+
+        .welcome h2 span {
+            color: #0f766e;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 19px;
+            color: #334155;
+            margin-bottom: 23px;
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .login-box {
+            background: white;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            border-radius: 17px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1);
+        }
+
+        .card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: #f0fdfa;
+            border: 1px solid #ccfbf1;
+            color: #0f766e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .login-box h3 {
+            color: #0f172a;
+            font-size: 23px;
+            margin-bottom: 12px;
+        }
+
+        .login-box p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 18px;
+            background: #0f766e;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .button:hover {
+            background: #115e59;
+        }
+
+        .button span {
+            font-size: 18px;
+        }
+
+        .notice {
+            max-width: 800px;
+            margin: 30px auto 0;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 22px;
+            color: #94a3b8;
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        @media (max-width: 650px) {
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .logo {
+                width: 45px;
+                height: 45px;
+                font-size: 26px;
+            }
+
+            .container {
+                padding: 45px 18px 35px;
+            }
+
+            .welcome {
+                margin-bottom: 35px;
+            }
+
+            .welcome p {
+                font-size: 14px;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .login-box {
+                padding: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">+</div>
+
+            <div>
+                <h1>Heart Failure Survival Prediction System</h1>
+                <p>Machine Learning-Based Clinical Decision Support</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+    <h2>Welcome</h2>
+
+    <p>
+        A machine learning-based system for
+        heart failure survival prediction.
+    </p>
+
+    <p>
+        Please select your login type to continue.
+    </p>
+</section>
+
+        <h3 class="section-title">Choose Your Login</h3>
+
+        <section class="login-container">
+
+            <!-- ADMIN LOGIN -->
+            <div class="login-box">
+                <div class="card-icon">&#9881;</div>
+
+                <h3>Administrator</h3>
+
+                <p>
+                    Access the administration panel to manage doctors,
+                    patient records and prediction-related information.
+                </p>
+
+                <a href="{% url 'admin_login' %}" class="button">
+                    Admin Login <span>&#8594;</span>
+                </a>
+            </div>
+
+            <!-- DOCTOR LOGIN -->
+            <div class="login-box">
+                <div class="card-icon">&#9829;</div>
+
+                <h3>Doctor</h3>
+
+                <p>
+                    Search for registered patients, enter clinical
+                    parameters, generate predictions and review
+                    previous prediction records.
+                </p>
+
+                <a href="{% url 'doctor_login' %}" class="button">
+                    Doctor Login <span>&#8594;</span>
+                </a>
+            </div>
+
+        </section>
+
+        <div class="notice">
+            <strong>Note:</strong> This system is developed for academic
+            and decision-support purposes. Its predictions are not a
+            medical diagnosis and should not replace professional
+            medical evaluation.
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        Heart Failure Survival Prediction System &copy; 2026
+    </footer>
+
+</body>
+</html>
